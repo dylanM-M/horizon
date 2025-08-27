@@ -64,7 +64,6 @@ function setup() {
       gradPower,
     }));
   }
-  initializeRects();
 }
 
 function windowResized() {
