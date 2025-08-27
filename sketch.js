@@ -14,7 +14,7 @@ const THEME = {
   bgStart:    [35, 230, 35, 0],
   bgEnd:      [0, 0, 255, 120],
   rectStart:  [35, 230, 35, 0],
-  rectEnd:    [255, 255, 255, 255],
+  rectEnd:    [255, 255, 255, 0],
 };
 
 // Will hold p5.Color objects (populated in setup)
