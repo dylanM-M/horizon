@@ -1,9 +1,8 @@
 // === Canvas settings ===
-const CANVAS_W = 800;
-const CANVAS_H = 500;
+let CANVAS_W, CANVAS_H;
 let margin = 9;
 let numRects = 8;
-let rectWidth = (CANVAS_W - margin * (numRects + 1)) / numRects;
+let rectWidth;
 let rects = [];
 let minHeight = margin;
 
@@ -33,7 +32,12 @@ let bgDragging = false;
 let bgStartMouseY = 0;
 
 function setup() {
+  // create canvas that fills iframe
+  CANVAS_W = windowWidth;
+  CANVAS_H = windowHeight;
   createCanvas(CANVAS_W, CANVAS_H);
+
+  rectWidth = (CANVAS_W - margin * (numRects + 1)) / numRects;
 
   // Convert THEME to p5.Color after p5 is ready
   const toCol = (arr) => color(arr[0], arr[1], arr[2], arr[3] ?? 255);
@@ -44,6 +48,51 @@ function setup() {
   PALETTE.rectEnd    = toCol(THEME.rectEnd);
 
   // Randomize initial background gradient power
+  bgPower = random(0.5, 2);
+
+  for (let i = 0; i < numRects; i++) {
+    let x = margin * (i + 1) + rectWidth * i;
+    let h = random(minHeight, CANVAS_H - 2 * margin);
+    let y = random(margin, CANVAS_H - margin - h);
+    let gradPower = random(0.5, 2);
+
+    rects.push(makeRect({
+      x, y, w: rectWidth, h,
+      resizeMode: "vertical",
+      c1: PALETTE.rectStart,
+      c2: PALETTE.rectEnd,
+      gradPower,
+    }));
+  }
+  initializeRects();
+}
+
+function windowResized() {
+  // recalc canvas size
+  CANVAS_W = windowWidth;
+  CANVAS_H = windowHeight;
+  resizeCanvas(CANVAS_W, CANVAS_H);
+
+  rectWidth = (CANVAS_W - margin * (numRects + 1)) / numRects;
+
+  // optionally reposition or rescale rectangles
+  for (let i = 0; i < rects.length; i++) {
+    let r = rects[i];
+    r.x = margin * (i + 1) + rectWidth * i;
+    r.w = rectWidth;
+    r.h = constrain(r.h, minHeight, CANVAS_H - 2 * margin);
+    r.y = constrain(r.y, margin, CANVAS_H - margin - r.h);
+  }
+}
+
+function initializeRects() {
+  const toCol = (arr) => color(arr[0], arr[1], arr[2], arr[3] ?? 255);
+  PALETTE.background = toCol(THEME.background);
+  PALETTE.bgStart    = toCol(THEME.bgStart);
+  PALETTE.bgEnd      = toCol(THEME.bgEnd);
+  PALETTE.rectStart  = toCol(THEME.rectStart);
+  PALETTE.rectEnd    = toCol(THEME.rectEnd);
+
   bgPower = random(0.5, 2);
 
   for (let i = 0; i < numRects; i++) {
