@@ -1,6 +1,6 @@
 // === Canvas settings ===
-const CANVAS_W = 160;
-const CANVAS_H = 100;
+const CANVAS_W = 10;
+const CANVAS_H = 10;
 let margin = 9;
 let numRects = 8;
 let rectWidth = (CANVAS_W - margin * (numRects + 1)) / numRects;
